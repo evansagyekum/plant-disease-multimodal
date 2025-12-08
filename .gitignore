@@ -1,0 +1,19 @@
+# Mac system files
+.DS_Store
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual Environment
+plantenv/
+venv/
+env/
+
+# Large Data & Models (Too big for GitHub free tier)
+data/
+experiments/*.pth
+experiments/*.png
+
+# Environment variables (API Keys)
+.env
