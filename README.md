@@ -18,7 +18,6 @@ This project implements a **Multimodal Deep Learning Architecture** that fuses *
 
 ## 🏗️ System Architecture
 
-
 ```mermaid
 graph LR
     subgraph Inputs
