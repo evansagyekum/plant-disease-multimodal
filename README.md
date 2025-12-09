@@ -23,22 +23,22 @@ The system uses a **Late Fusion** strategy. Two separate neural networks process
 ```mermaid
 graph LR
     subgraph Inputs
-    A[RGB Image <br/> (224x224)] --> |Spatial Feats| B(ResNet50 Encoder)
-    C[Spectral Curve <br/> (400-1000nm)] --> |Frequency Feats| D(1D-CNN Encoder)
+    A["RGB Image <br/> (224x224)"] --> |Spatial Feats| B("ResNet50 Encoder")
+    C["Spectral Curve <br/> (400-1000nm)"] --> |Frequency Feats| D("1D-CNN Encoder")
     end
 
     subgraph Fusion_Engine
-    B --> E[Image Embedding <br/> (256 dim)]
-    D --> F[Spectral Embedding <br/> (128 dim)]
+    B --> E["Image Embedding <br/> (256 dim)"]
+    D --> F["Spectral Embedding <br/> (128 dim)"]
     E --> G((Concatenate))
     F --> G
-    G --> H[Fusion Layer + ReLU]
+    G --> H["Fusion Layer + ReLU"]
     end
 
     subgraph Output
-    H --> I[Dropout 0.3]
-    I --> J[Classifier Head]
-    J --> K{Prediction: <br/> Healthy vs. Disease}
+    H --> I["Dropout 0.3"]
+    I --> J["Classifier Head"]
+    J --> K{"Prediction: <br/> Healthy vs. Disease"}
     end
 Key Technical Components
 Vision Branch: ResNet50 (Pretrained on ImageNet) extracts texture and leaf shape features.
@@ -100,6 +100,5 @@ Model Size: ~100MB
 🔮 Future Improvements
 Transformer Integration: Replace ResNet with a Vision Transformer (ViT) for global attention mechanisms.
 Edge Deployment: Quantize the model (INT8) for deployment on NVIDIA Jetson devices for field usage.
-
 Author: Evans Agyekum
-Tech Stack: PyTorch, FastAPI, Azure, Docker, Git. Linux VM
+Tech Stack: PyTorch, FastAPI, Azure, Docker, Git , Limux VM
