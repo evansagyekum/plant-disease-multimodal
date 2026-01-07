@@ -16,6 +16,10 @@ This project implements a **Multimodal Deep Learning Architecture** that fuses *
 
 ---
 
+## 🏗️ System Architecture
+
+### 1. Cloud & Deployment View
+```mermaid
 graph LR
     %% Styles
     classDef azure fill:#0078d4,stroke:#fff,stroke-width:2px,color:#fff;
@@ -59,10 +63,12 @@ graph LR
     class Container docker
     class App,Logic python
 
+```
 
-    See Below
+### 2. Model & Simulation View
 
-    graph TD
+```mermaid 
+graph TD
     %% Inputs
     InputImg[("📸 Input Image <br/> (RGB)")]
     
@@ -96,6 +102,7 @@ graph LR
         Concatenate --> Dense["Fully Connected Layer"]
         Dense --> Output["✅ Prediction <br/> (Healthy vs Disease)"]
     end
+```
 
 Key Technical Components
 Vision Branch: ResNet50 (Pretrained on ImageNet) extracts texture and leaf shape features.
