@@ -16,28 +16,87 @@ This project implements a **Multimodal Deep Learning Architecture** that fuses *
 
 ---
 
-## 🏗️ System Architecture
-
-```mermaid
 graph LR
-    subgraph Inputs
-    A["RGB Image <br/> (224x224)"] --> |Spatial Feats| B("ResNet50 Encoder")
-    C["Spectral Curve <br/> (400-1000nm)"] --> |Frequency Feats| D("1D-CNN Encoder")
+    %% Styles
+    classDef azure fill:#0078d4,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef docker fill:#2496ed,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef python fill:#ffd43b,stroke:#333,stroke-width:2px,color:#000;
+    classDef user fill:#333,stroke:#fff,stroke-width:2px,color:#fff;
+
+    %% User Layer
+    User((👤 Client)) -->|HTTP POST Image| Firewall[("🛡️ Azure NSG <br/> Firewall")]
+    class User user
+
+    %% Azure Layer
+    subgraph Cloud ["☁️ Azure Resource Group (East US)"]
+        direction LR
+        Firewall -->|Allow Port 80| VM
+        
+        subgraph VM ["💻 Linux Virtual Machine (Ubuntu)"]
+            
+            subgraph Container ["🐳 Docker Container"]
+                direction TB
+                Port["Port Mapping <br/> (80:8000)"] --> Server["⚡ Uvicorn Server"]
+                
+                subgraph App ["🐍 FastAPI Application"]
+                    Server --> Router["/predict Endpoint"]
+                    
+                    subgraph Logic ["Data Pipeline"]
+                        Router --> Pre["1. Preprocessing"]
+                        Pre --> Sim["2. Physics Engine"]
+                        Sim --> Inference["3. Model Inference"]
+                    end
+                end
+            end
+        end
     end
 
-    subgraph Fusion_Engine
-    B --> E["Image Embedding <br/> (256 dim)"]
-    D --> F["Spectral Embedding <br/> (128 dim)"]
-    E --> G((Concatenate))
-    F --> G
-    G --> H["Fusion Layer + ReLU"]
+    %% Return Flow
+    Inference -->|JSON Result| User
+
+    %% Apply Styles
+    class Cloud,VM azure
+    class Container docker
+    class App,Logic python
+
+
+    See Below
+
+    graph TD
+    %% Inputs
+    InputImg[("📸 Input Image <br/> (RGB)")]
+    
+    %% Preprocessing
+    subgraph Simulation ["🧪 Physics-Based Simulation"]
+        Logic1["Vegetation Index Calculation"]
+        Logic2["Red Edge Modeling (700nm)"]
+        Logic3["Noise Injection"]
+    end
+    
+    InputImg --> Logic1
+    Logic1 --> Logic2 --> Logic3
+    Logic3 --> InputSpec[("📈 Simulated Spectrum <br/> (200 Bands)")]
+
+    %% Model
+    subgraph Model ["🧠 Multimodal Fusion Network"]
+        direction TB
+        
+        subgraph Vision ["👁️ Vision Branch"]
+            InputImg --> ResNet["ResNet50 Backbone"]
+            ResNet --> FeatImg["Spatial Embeddings <br/> (256 dim)"]
+        end
+        
+        subgraph Spectral ["📊 Spectral Branch"]
+            InputSpec --> CNN["1D-CNN (3-Layer)"]
+            CNN --> FeatSpec["Spectral Embeddings <br/> (128 dim)"]
+        end
+        
+        FeatImg --> Concatenate((➕ Concatenate))
+        FeatSpec --> Concatenate
+        Concatenate --> Dense["Fully Connected Layer"]
+        Dense --> Output["✅ Prediction <br/> (Healthy vs Disease)"]
     end
 
-    subgraph Output
-    H --> I["Dropout 0.3"]
-    I --> J["Classifier Head"]
-    J --> K{"Prediction: <br/> Healthy vs. Disease"}
-    end
 Key Technical Components
 Vision Branch: ResNet50 (Pretrained on ImageNet) extracts texture and leaf shape features.
 Spectral Branch: A custom 3-layer 1D-CNN processes 200 spectral bands to detect biochemical changes (chlorophyll absorption).
